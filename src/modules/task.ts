@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Task } from "../constants/task";
 
-let currentId = 2;
-
 type State = {
   tasks: Task[];
 };
@@ -23,6 +21,9 @@ const initialState: State = {
     },
   ],
 };
+
+// TODO: 別の方法に変える (ちょっとめんどくさかった)
+let currentId = 2;
 
 const reducers = {
   addTask(state: State, action: PayloadAction<string>) {

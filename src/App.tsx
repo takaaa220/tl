@@ -2,8 +2,8 @@ import * as React from "react";
 /** @jsx jsx */
 import { Global, css } from "@emotion/core";
 import styled from "@emotion/styled";
-import { Tasks } from "./components/Task/List";
-import { Filter } from "./components/Filter";
+import { Tasks } from "./containers/Task/List";
+import { Filter } from "./containers/Filter";
 
 export const App: React.FC = () => (
   <>
