@@ -4,3 +4,5 @@ export type Task = {
   done: boolean;
   userId: number;
 };
+
+export type Filter = "None" | "Done" | "InProgress";

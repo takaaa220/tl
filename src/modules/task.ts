@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Task } from "../constants/task";
 
+let currentId = 2;
+
 type State = {
-  count: number;
   tasks: Task[];
 };
 
 const initialState: State = {
-  count: 2,
   tasks: [
     {
       id: 2,
@@ -27,7 +27,7 @@ const initialState: State = {
 const reducers = {
   addTask(state: State, action: PayloadAction<string>) {
     const newTask = {
-      id: 3,
+      id: ++currentId,
       title: action.payload,
       done: false,
       userId: 1,

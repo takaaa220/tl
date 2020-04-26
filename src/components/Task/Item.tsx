@@ -47,12 +47,12 @@ export const Task: React.FC<ContainerProps> = ({ task, ...props }) => {
         }),
       );
     },
-    [dispatch, task],
+    [dispatch, task, changeStateTask],
   );
 
   const handleDelete = React.useCallback(() => {
     if (confirm("削除しますか？")) dispatch(deleteTask(task.id));
-  }, [task, dispatch]);
+  }, [task, dispatch, deleteTask]);
 
   return <View task={task} onChange={handleChange} onDelete={handleDelete} {...props} />;
 };

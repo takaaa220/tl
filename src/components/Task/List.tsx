@@ -23,6 +23,22 @@ const List = styled.ul``;
 
 export const Tasks: React.FC = (props) => {
   const { tasks } = useSelector((state: RootState) => state.tasks);
+  const { filter } = useSelector((state: RootState) => state.filter);
 
-  return <View tasks={tasks} {...props} />;
+  const currentTasks = React.useMemo(
+    () =>
+      (() => {
+        switch (filter) {
+          case "None":
+            return [...tasks.filter((task) => !task.done), ...tasks.filter((task) => task.done)];
+          case "InProgress":
+            return tasks.filter((task) => !task.done);
+          case "Done":
+            return tasks.filter((task) => task.done);
+        }
+      })(),
+    [filter, tasks],
+  );
+
+  return <View tasks={currentTasks} {...props} />;
 };

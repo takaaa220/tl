@@ -3,11 +3,13 @@ import * as React from "react";
 import { Global, css } from "@emotion/core";
 import styled from "@emotion/styled";
 import { Tasks } from "./components/Task/List";
+import { Filter } from "./components/Filter";
 
 export const App: React.FC = () => (
   <>
     <Global styles={globalStyle} />
     <Container>
+      <Filter />
       <Tasks />
     </Container>
   </>

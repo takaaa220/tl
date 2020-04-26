@@ -54,7 +54,7 @@ export const AddTask: React.FC = () => {
       setTitle("");
       dispatch(addTask(trimedTitle));
     },
-    [dispatch, title],
+    [dispatch, title, addTask, setTitle],
   );
 
   return <View current={title} onChange={handleChange} onAddTask={handleAddTask} />;
