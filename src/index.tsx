@@ -1,5 +1,13 @@
 import * as React from "react";
 import { render } from "react-dom";
+import { Provider } from "react-redux";
 
-const App: React.FC = () => <div>App</div>;
-render(<App />, document.getElementById("root"));
+import store from "./store";
+import { App } from "./App";
+
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root"),
+);
