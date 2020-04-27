@@ -7,22 +7,26 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../rootReducer";
 
 type Props = {
+  loading: boolean;
   tasks: TaskType[];
 };
 
-const View: React.FC<Props> = ({ tasks }) => (
-  <List>
-    {tasks.map((task) => (
-      <Task key={task.id} task={task} />
-    ))}
-    <AddTask />
-  </List>
+const View: React.FC<Props> = ({ loading, tasks }) => (
+  <>
+    {loading && <div>loading...</div>}
+    <List>
+      {tasks.map((task) => (
+        <Task key={task.id} task={task} />
+      ))}
+      <AddTask />
+    </List>
+  </>
 );
 
 const List = styled.ul``;
 
 export const Tasks: React.FC = (props) => {
-  const { tasks } = useSelector((state: RootState) => state.tasks);
+  const { tasks, loading } = useSelector((state: RootState) => state.tasks);
   const { filter } = useSelector((state: RootState) => state.filter);
 
   const currentTasks = React.useMemo(
@@ -40,5 +44,5 @@ export const Tasks: React.FC = (props) => {
     [filter, tasks],
   );
 
-  return <View tasks={currentTasks} {...props} />;
+  return <View loading={loading} tasks={currentTasks} {...props} />;
 };

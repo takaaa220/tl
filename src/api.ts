@@ -39,8 +39,8 @@ export const getTasks = () =>
     resolve(tasks);
   });
 
-export const addTask = (title: string, userId: number) =>
-  new Promise<Task[]>(async (resolve) => {
+export const createTask = (title: string, userId: number) =>
+  new Promise<Task>(async (resolve) => {
     await sleep();
 
     const newTask = {
@@ -50,25 +50,33 @@ export const addTask = (title: string, userId: number) =>
       userId,
     };
     tasks = [newTask, ...tasks];
-    resolve(tasks);
+    resolve(newTask);
   });
 
-export const changeStatusTask = (id: number, done: boolean) =>
-  new Promise<Task[]>(async (resolve, reject) => {
+export const updateStatusTask = (id: number, done: boolean) =>
+  new Promise<Task>(async (resolve, reject) => {
     await sleep();
 
-    tasks = tasks.map((t) =>
-      t.id === id
+    const task = tasks.find((task) => task.id === id);
+    tasks = tasks.map((task) =>
+      task.id === id
         ? {
-            ...t,
+            ...task,
             done,
           }
-        : t,
+        : task,
     );
-    resolve(tasks);
+
+    if (!task) {
+      return reject({
+        error: "not found",
+      });
+    }
+
+    resolve({ ...task, done });
   });
 
-export const deleteTask = (id: number) =>
+export const destroyTask = (id: number) =>
   new Promise<void>(async (resolve, reject) => {
     await sleep();
 

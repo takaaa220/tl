@@ -2,7 +2,7 @@ import * as React from "react";
 import { Task as TaskType } from "../../constants/task";
 import styled from "@emotion/styled";
 import { useSelector, useDispatch } from "react-redux";
-import { changeStateTask, deleteTask, addTask } from "../../modules/task";
+import { addTask, addTaskThunk } from "../../modules/task";
 
 type Props = {
   current: string;
@@ -52,7 +52,7 @@ export const AddTask: React.FC = () => {
 
       if (trimedTitle.length === 0) return;
       setTitle("");
-      dispatch(addTask(trimedTitle));
+      dispatch(addTaskThunk(trimedTitle));
     },
     [dispatch, title, addTask, setTitle],
   );

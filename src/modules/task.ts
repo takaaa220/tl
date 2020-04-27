@@ -1,45 +1,57 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, ThunkDispatch, ThunkAction } from "@reduxjs/toolkit";
 import { Task } from "../constants/task";
+import { AppThunkAction } from "../store";
+import { createTask, updateStatusTask, destroyTask } from "../api";
 
 type State = {
+  loading: boolean;
   tasks: Task[];
 };
 
 const initialState: State = {
+  loading: false,
   tasks: [],
 };
 
-// TODO: 別の方法に変える (ちょっとめんどくさかった)
-let currentId = 2;
-
 const reducers = {
-  addTask(state: State, action: PayloadAction<string>) {
+  startAdd(state: State, action: PayloadAction<string>) {
     const newTask = {
-      id: ++currentId,
+      id: -1,
       title: action.payload,
       done: false,
+      loading: true,
       userId: 1,
     };
-    const tasks = [newTask, ...state.tasks];
+
+    return {
+      ...state,
+      tasks: [newTask, ...state.tasks],
+      loading: true,
+    };
+  },
+  addTask(state: State, action: PayloadAction<Task>) {
+    const tasks = state.tasks.map((task) => (task.id === -1 ? action.payload : task));
+
+    return {
+      ...state,
+      tasks,
+      loading: false,
+    };
+  },
+  changeStatus(state: State, action: PayloadAction<Task>) {
+    const tasks = state.tasks.map((task) =>
+      task.id === action.payload.id ? action.payload : task,
+    );
 
     return {
       ...state,
       tasks,
     };
   },
-  changeStateTask(state: State, action: PayloadAction<Pick<Task, "id" | "done">>) {
-    const tasks = state.tasks.map((task) =>
-      task.id === action.payload.id
-        ? {
-            ...task,
-            done: action.payload.done,
-          }
-        : task,
-    );
-
+  startFetch(state: State, action: PayloadAction<void>) {
     return {
       ...state,
-      tasks,
+      loading: true,
     };
   },
   deleteTask(state: State, action: PayloadAction<number>) {
@@ -48,6 +60,7 @@ const reducers = {
     return {
       ...state,
       tasks,
+      loading: false,
     };
   },
 };
@@ -58,6 +71,26 @@ const slice = createSlice({
   reducers,
 });
 
-export const { addTask, changeStateTask, deleteTask } = slice.actions;
+export const { addTask, startAdd, changeStatus, startFetch, deleteTask } = slice.actions;
+
+export const addTaskThunk = (title: string): AppThunkAction => async (dispatch, getState) => {
+  dispatch(startAdd(title));
+  const newTask = await createTask(title, 1);
+  dispatch(addTask(newTask));
+};
+
+export const changeStatusThunk = (id: number, done: boolean): AppThunkAction => async (
+  dispatch,
+) => {
+  dispatch(startFetch());
+  const task = await updateStatusTask(id, done);
+  dispatch(changeStatus(task));
+};
+
+export const deleteTaskThunk = (id: number): AppThunkAction => async (dispatch) => {
+  dispatch(startFetch());
+  await destroyTask(id);
+  dispatch(deleteTask(id));
+};
 
 export default slice.reducer;
