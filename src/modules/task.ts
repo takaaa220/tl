@@ -6,20 +6,7 @@ type State = {
 };
 
 const initialState: State = {
-  tasks: [
-    {
-      id: 2,
-      title: "いいかんじのTodo",
-      done: false,
-      userId: 1,
-    },
-    {
-      id: 1,
-      title: "いい感じではないTodo",
-      done: true,
-      userId: 1,
-    },
-  ],
+  tasks: [],
 };
 
 // TODO: 別の方法に変える (ちょっとめんどくさかった)
